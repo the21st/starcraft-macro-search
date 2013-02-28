@@ -1,3 +1,5 @@
 syntax: glob
+MacroSearch/MacroSearch/Debug
+MacroSearch/Debug
 **.sdf
 **.suo

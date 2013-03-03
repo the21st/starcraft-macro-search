@@ -10,5 +10,51 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="AlphaBeta.cpp">
+      <Filter>Search</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Production.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Search</Filter>
+    </ClCompile>
+    <ClCompile Include="CalendarSimulator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AlphaBeta.h">
+      <Filter>Search</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Production.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Node.h">
+      <Filter>Search</Filter>
+    </ClInclude>
+    <ClInclude Include="ISimulator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CalendarSimulator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
 </Project>

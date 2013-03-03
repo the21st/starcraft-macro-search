@@ -3,3 +3,7 @@ MacroSearch/MacroSearch/Debug
 MacroSearch/Debug
 **.sdf
 **.suo
+**.opensdf
+MacroSearch/MacroSearch/Release
+MacroSearch/Release
+**.user

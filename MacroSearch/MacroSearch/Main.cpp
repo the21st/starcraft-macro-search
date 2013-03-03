@@ -1,7 +1,37 @@
-#include <stdio.h>
+#pragma once
 
-int main( int argc, char* argv[] )
+#include <iostream>
+#include "BWAPI.h"
+#include "AlphaBeta.h"
+#include "CalendarSimulator.h"
+#include "Timer.h"
+
+int main(int argc, char* argv[])
 {
-	printf ("hello");
+	//BWAPI::BWAPI_init();
+
+	GameState initialGameState;
+	initialGameState._minPlayerState._workerCount = 4;
+	initialGameState._minPlayerState._buildingsOwned.push_back(Nexus);
+	initialGameState._maxPlayerState._workerCount = 4;
+	initialGameState._maxPlayerState._buildingsOwned.push_back(Nexus);
+
+	auto alphaBeta = AlphaBeta();
+
+	Timer timer;
+	timer.start();
+
+	AlphaBetaScore result = alphaBeta.Search(Node(initialGameState, CalendarSimulator()), 9, -999999, 999999);
+
+	timer.stop();
+
+	auto time = timer.getElapsedTime();
+
+	float averageBranchingFactor = (float)totalDecisions / (float)totalVisitedNonTerminalNodes;
+
+	std::cout << time;
+
+	std::cin.get();
+
 	return 0;
 }

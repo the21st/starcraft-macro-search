@@ -81,6 +81,7 @@
     <ClInclude Include="CalendarSimulator.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="ISearchNode.h" />
     <ClInclude Include="ISimulator.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PlayerState.h" />

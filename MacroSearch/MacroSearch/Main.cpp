@@ -5,6 +5,7 @@
 #include "AlphaBeta.h"
 #include "CalendarSimulator.h"
 #include "Timer.h"
+#include "Node.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +22,7 @@ int main(int argc, char* argv[])
 	Timer timer;
 	timer.start();
 
-	AlphaBetaScore result = alphaBeta.Search(Node(initialGameState, CalendarSimulator()), 9, -999999, 999999);
+	AlphaBetaScore result = alphaBeta.Search(Node(initialGameState, CalendarSimulator()), 10, -999999, 999999);
 
 	timer.stop();
 
@@ -29,7 +30,9 @@ int main(int argc, char* argv[])
 
 	float averageBranchingFactor = (float)totalDecisions / (float)totalVisitedNonTerminalNodes;
 
-	std::cout << time;
+	std::cout << time << " seconds" << std::endl;
+	std::cout << "Score: " << result << std::endl;
+	std::cout << "Total nodes expanded: " << totalDecisions << std::endl;
 
 	std::cin.get();
 

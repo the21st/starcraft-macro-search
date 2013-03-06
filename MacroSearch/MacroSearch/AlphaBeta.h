@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.h"
+#include "ISearchNode.h"
 
 class AlphaBeta
 {
@@ -8,6 +8,6 @@ public:
 	AlphaBeta(void);
 	~AlphaBeta(void);
 
-	AlphaBetaScore Search(Node state, int depth, float alpha, float beta);
+	AlphaBetaScore Search(ISearchNode & state, int depth, float alpha, float beta);
 };
 

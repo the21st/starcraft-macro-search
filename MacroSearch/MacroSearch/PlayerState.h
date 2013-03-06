@@ -1,6 +1,6 @@
 #pragma once
 
-#include <BWAPI.h>
+#include "BWAPI.h"
 #include "Production.h"
 #include "Action.h"
 
@@ -16,7 +16,7 @@ public:
 	void SetArmyStrength(float val) { _armyStrength = val; }
 
 	float _mineralAmount; 
-	float MineralIncome() {return _workerCount * 0.1f;}
+	float MineralIncome() {return _workerCount * 0.01f;}
 
 	float _supplyCurrent; 
 	float _supplyMax; 

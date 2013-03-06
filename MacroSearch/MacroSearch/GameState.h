@@ -8,9 +8,9 @@ class GameState
 public:
 	GameState(void);
 	~GameState(void);
-	bool IsGameEnded();
-	AlphaBetaScore Evaluate();
-	bool IsMaxPlayerMove();
+	bool IsGameEnded() const;
+	AlphaBetaScore Evaluate() const;
+	bool IsMaxPlayerMove() const;
 	void Simulate( GameTime deltaTime );
 
 	GameTime _gameTime;
@@ -19,7 +19,7 @@ public:
 	PlayerState _maxPlayerState;
 	PlayerState _minPlayerState;
 
-	PlayerState & GetPlayerToMove();
+	const PlayerState & GetPlayerToMove() const;
 
 private:
 	bool UpdatePlayerProduction( GameTime deltaTime, PlayerState & playerState );

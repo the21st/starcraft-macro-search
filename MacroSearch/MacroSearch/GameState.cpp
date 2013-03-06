@@ -13,17 +13,20 @@ GameState::~GameState(void)
 {
 }
 
-bool GameState::IsGameEnded()
+bool GameState::IsGameEnded() const
 {
 	return _maxPlayerState.GetBuildingsOwned().empty() || _minPlayerState.GetBuildingsOwned().empty();
 }
 
-AlphaBetaScore GameState::Evaluate()
+AlphaBetaScore GameState::Evaluate() const
 {
-	return _maxPlayerState.GetArmyStrength() - _minPlayerState.GetArmyStrength();
+	return (_maxPlayerState._armyStrength - _minPlayerState._armyStrength) +
+		   0.3f * (_maxPlayerState._workerCount - _minPlayerState._workerCount) + 
+		   2 * (_maxPlayerState._buildingsOwned.size() - _minPlayerState._buildingsOwned.size()) +
+		   0.05f * (_maxPlayerState._mineralAmount - _minPlayerState._mineralAmount);
 }
 
-bool GameState::IsMaxPlayerMove()
+bool GameState::IsMaxPlayerMove() const
 {
 	return _isMaxPlayerMove;
 }
@@ -96,7 +99,7 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 	return built;
 }
 
-PlayerState & GameState::GetPlayerToMove()
+const PlayerState & GameState::GetPlayerToMove() const
 {
 	if (IsMaxPlayerMove())
 	{

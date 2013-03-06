@@ -85,10 +85,6 @@ GameState CalendarSimulator::GetNextState( const GameState & currentState, Actio
 				{
 					newState._minPlayerState._workerCount--;
 				}
-				else
-				{
-					newState._minPlayerState._buildingsOwned.pop_back();
-				}
 			}
 		}
 		else
@@ -103,10 +99,6 @@ GameState CalendarSimulator::GetNextState( const GameState & currentState, Actio
 				if (currentState._maxPlayerState._workerCount > 0)
 				{
 					newState._maxPlayerState._workerCount--;
-				}
-				else
-				{
-					newState._maxPlayerState._buildingsOwned.pop_back();
 				}
 			}
 		}

@@ -56,5 +56,8 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="ISearchNode.h">
+      <Filter>Search</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,7 +12,6 @@ Node::Node( GameState gameState, const ISimulator & simulator )
 
 Node::~Node(void)
 {
-	CleanUpChildren();
 }
 
 bool Node::IsTerminal() const
@@ -32,41 +31,32 @@ bool Node::IsMaxPlayerMove() const
 
 std::vector<ISearchNode*> Node::GenerateChildren()
 {
-	CleanUpChildren();
+	std::vector<ISearchNode*> children;
 
 	if (_gameState.GetPlayerToMove()._armyStrength > 0)
 	{
-		_children.push_back(new Node(_simulator.GetNextState(_gameState, Attack, _gameState._isMaxPlayerMove), _simulator));
+		children.push_back(new Node(_simulator.GetNextState(_gameState, Attack, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 50)
 	{
-		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildProbe, _gameState._isMaxPlayerMove), _simulator));
+		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildProbe, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 100)
 	{
-		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildZealot, _gameState._isMaxPlayerMove), _simulator));
+		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildZealot, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 150)
 	{
-		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildGateway, _gameState._isMaxPlayerMove), _simulator));
+		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildGateway, _gameState._isMaxPlayerMove), _simulator));
 	}
 
-	_children.push_back(new Node(_simulator.GetNextState(_gameState, None, _gameState._isMaxPlayerMove), _simulator));
+	children.push_back(new Node(_simulator.GetNextState(_gameState, None, _gameState._isMaxPlayerMove), _simulator));
 
 	totalVisitedNonTerminalNodes++;
-	totalDecisions += _children.size();
+	totalDecisions += children.size();
 
-	return _children;
-}
-
-void Node::CleanUpChildren()
-{
-	for (size_t i = 0; i < _children.size(); i++)
-	{
-		delete _children[i];
-	}
-	_children.clear();
+	return children;
 }

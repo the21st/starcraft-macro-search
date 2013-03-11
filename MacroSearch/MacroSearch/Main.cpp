@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	GameState initialGameState;
 	initialGameState._minPlayerState._workerCount = 4;
 	initialGameState._minPlayerState._buildingsOwned.push_back(Nexus);
-	initialGameState._maxPlayerState._workerCount = 4;
+	initialGameState._maxPlayerState._workerCount = 3;
 	initialGameState._maxPlayerState._buildingsOwned.push_back(Nexus);
 
 	auto alphaBeta = AlphaBeta();
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	Timer timer;
 	timer.start();
 
-	AlphaBetaScore result = alphaBeta.Search(Node(initialGameState, CalendarSimulator()), 10, -999999, 999999);
+	AlphaBetaScore result = alphaBeta.SearchUsingRecursion(Node(initialGameState, CalendarSimulator()), 10, -999999, 999999);
 
 	timer.stop();
 

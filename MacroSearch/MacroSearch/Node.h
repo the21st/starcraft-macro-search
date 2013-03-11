@@ -21,10 +21,8 @@ public:
 	virtual std::vector<ISearchNode*> GenerateChildren();
 
 private:
-	void CleanUpChildren();
-
 	GameState _gameState;
 	const ISimulator & _simulator;
-	std::vector<ISearchNode*> _children;
+
 };
 

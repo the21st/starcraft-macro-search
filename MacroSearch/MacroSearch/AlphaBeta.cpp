@@ -23,7 +23,7 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 
 	if (maxPlayer)
 	{
-		auto children = node.GetChildren();
+		auto children = node.GenerateChildren();
 		for each (auto child in children)
 		{
 			alpha = std::max(alpha, Search(*child, depth-1, alpha, beta));
@@ -34,16 +34,11 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 			}
 		}
 
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			delete children[i];
-		}
-
 		return alpha;
 	}
 	else
 	{
-		auto children = node.GetChildren();
+		auto children = node.GenerateChildren();
 		for each (auto child in children)
 		{
 			beta = std::min(beta, Search(*child, depth-1, alpha, beta));
@@ -52,11 +47,6 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 				// Alpha cut-off
 				break;
 			}
-		}
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			delete children[i];
 		}
 
 		return beta;

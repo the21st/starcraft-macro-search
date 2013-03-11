@@ -12,6 +12,7 @@ Node::Node( GameState gameState, const ISimulator & simulator )
 
 Node::~Node(void)
 {
+	CleanUpChildren();
 }
 
 bool Node::IsTerminal() const
@@ -29,34 +30,43 @@ bool Node::IsMaxPlayerMove() const
 	return _gameState.IsMaxPlayerMove();
 }
 
-std::vector<ISearchNode*> Node::GetChildren() const
+std::vector<ISearchNode*> Node::GenerateChildren()
 {
-	std::vector<ISearchNode*> children;
+	CleanUpChildren();
 
 	if (_gameState.GetPlayerToMove()._armyStrength > 0)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, Attack, _gameState._isMaxPlayerMove), _simulator));
+		_children.push_back(new Node(_simulator.GetNextState(_gameState, Attack, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 50)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildProbe, _gameState._isMaxPlayerMove), _simulator));
+		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildProbe, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 100)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildZealot, _gameState._isMaxPlayerMove), _simulator));
+		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildZealot, _gameState._isMaxPlayerMove), _simulator));
 	}
 
 	if (_gameState.GetPlayerToMove()._mineralAmount >= 150)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildGateway, _gameState._isMaxPlayerMove), _simulator));
+		_children.push_back(new Node(_simulator.GetNextState(_gameState, BuildGateway, _gameState._isMaxPlayerMove), _simulator));
 	}
 
-	children.push_back(new Node(_simulator.GetNextState(_gameState, None, _gameState._isMaxPlayerMove), _simulator));
+	_children.push_back(new Node(_simulator.GetNextState(_gameState, None, _gameState._isMaxPlayerMove), _simulator));
 
 	totalVisitedNonTerminalNodes++;
-	totalDecisions += children.size();
+	totalDecisions += _children.size();
 
-	return children;
+	return _children;
+}
+
+void Node::CleanUpChildren()
+{
+	for (size_t i = 0; i < _children.size(); i++)
+	{
+		delete _children[i];
+	}
+	_children.clear();
 }

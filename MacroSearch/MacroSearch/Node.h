@@ -18,10 +18,13 @@ public:
 	virtual bool IsTerminal() const;
 	virtual bool IsMaxPlayerMove() const;
 	virtual AlphaBetaScore Eval() const;
-	virtual std::vector<ISearchNode*> GetChildren() const;
+	virtual std::vector<ISearchNode*> GenerateChildren();
 
 private:
+	void CleanUpChildren();
+
 	GameState _gameState;
 	const ISimulator & _simulator;
+	std::vector<ISearchNode*> _children;
 };
 

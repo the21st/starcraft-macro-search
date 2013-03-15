@@ -22,7 +22,13 @@ int main(int argc, char* argv[])
 	Timer timer;
 	timer.start();
 
-	AlphaBetaScore result = alphaBeta.SearchUsingRecursion(Node(initialGameState, CalendarSimulator()), 10, -999999, 999999);
+	int depth = 10;
+
+	ISearchNode * initialNode = new Node(initialGameState, CalendarSimulator());
+	AlphaBetaScore resultIterative = alphaBeta.SearchIterative(initialNode, depth, -999999, 999999);
+	delete initialNode;
+
+	//AlphaBetaScore resultRecursive = alphaBeta.SearchRecursive(Node(initialGameState, CalendarSimulator()), depth, -999999, 999999);
 
 	timer.stop();
 
@@ -31,7 +37,7 @@ int main(int argc, char* argv[])
 	float averageBranchingFactor = (float)totalDecisions / (float)totalVisitedNonTerminalNodes;
 
 	std::cout << time << " seconds" << std::endl;
-	std::cout << "Score: " << result << std::endl;
+	std::cout << "Score: " << resultIterative << std::endl;
 	std::cout << "Total nodes expanded: " << totalDecisions << std::endl;
 
 	std::cin.get();

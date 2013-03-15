@@ -9,11 +9,18 @@
 // (First rule)
 struct AlphaBetaSnapshot
 {
+	// parameters
+	ISearchNode * Node;
 	int Depth;
 	AlphaBetaScore Alpha;
 	AlphaBetaScore Beta;
 
+	// local variables
+	std::vector<ISearchNode*> Children;
+
+	// control variables
 	int Stage;
+	int ChildIndex;
 };
 
 AlphaBeta::AlphaBeta(void)
@@ -25,7 +32,7 @@ AlphaBeta::~AlphaBeta(void)
 {
 }
 
-AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
+AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
 {
 	// (Second rule)
 	AlphaBetaScore returnValue = 0;
@@ -35,10 +42,12 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 
 	// (Fourth rule)
 	AlphaBetaSnapshot initialSnapshot;
+	initialSnapshot.Node = node;
 	initialSnapshot.Depth = depth;
 	initialSnapshot.Alpha = alpha;
 	initialSnapshot.Beta = beta;
 	initialSnapshot.Stage = 0; // set the value as initial stage
+	initialSnapshot.ChildIndex = -1; // set the value as initial stage
 
 	recursionStack.push(initialSnapshot);
 
@@ -48,48 +57,131 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 		auto currentSnapshot = recursionStack.top();
 		recursionStack.pop();
 
-		int depth = currentSnapshot.Depth;
-		//ISearchNode& node = currentParams.Node;
-		AlphaBetaScore alpha = currentSnapshot.Alpha;
-		AlphaBetaScore beta = currentSnapshot.Beta;
-
-		if (depth == 0 || node.IsTerminal())
+		// (Sixth rule)
+		switch (currentSnapshot.Stage)
 		{
-			auto result = node.Eval();
-			return result;
-		}
-
-		auto maxPlayer = node.IsMaxPlayerMove();
-
-		if (maxPlayer)
-		{
-			auto children = node.GenerateChildren();
-			for each (auto child in children)
+		case 0:
 			{
-				alpha = std::max(alpha, Search(*child, depth-1, alpha, beta));
-				if (beta <= alpha)
+				if (currentSnapshot.Depth == 0 || currentSnapshot.Node->IsTerminal())
 				{
-					// Beta cut-off
-					break;
+					returnValue = currentSnapshot.Node->Eval();
+					continue;
 				}
+
+				currentSnapshot.Children = currentSnapshot.Node->GenerateChildren();
+
+				// (Tenth rule)
+				// current snapshot need to process after
+				currentSnapshot.Stage = 1;
+				currentSnapshot.ChildIndex = 0;
+				// returning from the recursive call
+				// this MUST pushed into stack before 
+				recursionStack.push(currentSnapshot);
+			
+				// Create a new snapshot for calling itself
+				// Search(child, currentSnapshot.Depth - 1, currentSnapshot.Alpha, currentSnapshot.Beta)
+				AlphaBetaSnapshot newSnapshot;
+				newSnapshot.Node = currentSnapshot.Children[currentSnapshot.ChildIndex];
+				newSnapshot.Depth = currentSnapshot.Depth - 1;
+				newSnapshot.Alpha = currentSnapshot.Alpha;
+				newSnapshot.Beta = currentSnapshot.Beta;
+
+				// since it will start from the beginning of the function, give the initial stage
+				newSnapshot.Stage = 0;
+				recursionStack.push(newSnapshot);
+				continue;
+
+				break;
+			}
+		case 1:
+
+			{
+				auto childSearchResult = returnValue;
+
+				if (currentSnapshot.Node->IsMaxPlayerMove())
+				{
+					currentSnapshot.Alpha = std::max(currentSnapshot.Alpha, childSearchResult);
+				}
+				else
+				{
+					currentSnapshot.Beta = std::min(currentSnapshot.Beta, childSearchResult);
+				}
+
+				currentSnapshot.ChildIndex++;
+				if (currentSnapshot.ChildIndex < currentSnapshot.Children.size())
+				{
+					// PRUNE ?
+					if (currentSnapshot.Beta > currentSnapshot.Alpha)
+					{
+						// NOT PRUNED ! push next child
+
+						// (Tenth rule)
+						// current snapshot need to process after
+						currentSnapshot.Stage = 1;
+						// returning from the recursive call
+						// this MUST pushed into stack before 
+						recursionStack.push(currentSnapshot);
+
+						// Create a new snapshot for calling itself
+						// Search(child, currentSnapshot.Depth - 1, currentSnapshot.Alpha, currentSnapshot.Beta)
+						AlphaBetaSnapshot nextSnapshot;
+						nextSnapshot.Node = currentSnapshot.Children[currentSnapshot.ChildIndex];
+						nextSnapshot.Depth = currentSnapshot.Depth - 1;
+						nextSnapshot.Alpha = currentSnapshot.Alpha;
+						nextSnapshot.Beta = currentSnapshot.Beta;
+
+						// since it will start from the beginning of the function, give the initial stage
+						nextSnapshot.Stage = 0;
+						recursionStack.push(nextSnapshot);
+						continue;
+					}
+					else
+					{
+						// PRUNED !
+
+						for (size_t i = 0; i < currentSnapshot.Children.size(); i++)
+						{
+							delete currentSnapshot.Children[i];
+						}
+
+						if (currentSnapshot.Node->IsMaxPlayerMove())
+						{
+							returnValue = currentSnapshot.Alpha;
+							continue;
+						}
+						else
+						{
+							returnValue = currentSnapshot.Beta;
+							continue;
+						}
+					}
+				}
+				else
+				{
+					for (size_t i = 0; i < currentSnapshot.Children.size(); i++)
+					{
+						delete currentSnapshot.Children[i];
+					}
+
+					if (currentSnapshot.Node->IsMaxPlayerMove())
+					{
+						returnValue = currentSnapshot.Alpha;
+						continue;
+					}
+					else
+					{
+						returnValue = currentSnapshot.Beta;
+						continue;
+					}
+				}
+
+				break;
+
 			}
 
-			return alpha;
-		}
-		else
-		{
-			auto children = node.GenerateChildren();
-			for each (auto child in children)
-			{
-				beta = std::min(beta, Search(*child, depth-1, alpha, beta));
-				if (beta <= alpha)
-				{
-					// Alpha cut-off
-					break;
-				}
-			}
-
-			return beta;
+		default:
+			throw 1;
+			break;
 		}
 	}
 
@@ -97,7 +189,7 @@ AlphaBetaScore AlphaBeta::Search(ISearchNode & node, int depth, AlphaBetaScore a
 	return returnValue;
 }
 
-AlphaBetaScore AlphaBeta::SearchUsingRecursion(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
+AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
 {
 	if (depth == 0 || node.IsTerminal())
 	{
@@ -110,7 +202,7 @@ AlphaBetaScore AlphaBeta::SearchUsingRecursion(ISearchNode & node, int depth, Al
 	auto children = node.GenerateChildren();
 	for each (auto child in children)
 	{
-		auto childSearchResult = SearchUsingRecursion(*child, depth-1, alpha, beta);
+		auto childSearchResult = SearchRecursive(*child, depth-1, alpha, beta);
 
 		if (maxPlayer)
 		{

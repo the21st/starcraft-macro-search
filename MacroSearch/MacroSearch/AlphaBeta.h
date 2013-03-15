@@ -9,9 +9,9 @@ public:
 	AlphaBeta(void);
 	~AlphaBeta(void);
 
-	AlphaBetaScore Search(ISearchNode & state, int depth, float alpha, float beta);
+	AlphaBetaScore SearchIterative(ISearchNode * state, int depth, float alpha, float beta);
 
-	AlphaBetaScore SearchUsingRecursion(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta);
+	AlphaBetaScore SearchRecursive(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta);
 
 };
 

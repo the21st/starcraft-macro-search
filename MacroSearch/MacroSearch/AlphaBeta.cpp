@@ -26,8 +26,8 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 	initialSnapshot.Depth = depth;
 	initialSnapshot.Alpha = alpha;
 	initialSnapshot.Beta = beta;
-	initialSnapshot.Stage = 0; // set the value as initial stage
-	initialSnapshot.ChildIndex = 0; // set the value as initial stage
+	initialSnapshot.Stage = 0;
+	initialSnapshot.ChildIndex = -1;
 
 	recursionStack.push(initialSnapshot);
 
@@ -49,6 +49,7 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 				}
 
 				currentSnapshot.Children = currentSnapshot.Node->GenerateChildren();
+				currentSnapshot.ChildIndex = 0;
 
 				PushNextChild(currentSnapshot, recursionStack);
 

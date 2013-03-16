@@ -6,6 +6,7 @@
 #include "CalendarSimulator.h"
 #include "Timer.h"
 #include "Node.h"
+#include <assert.h>
 
 int main(int argc, char* argv[])
 {
@@ -24,9 +25,14 @@ int main(int argc, char* argv[])
 
 	int depth = 10;
 
-	AlphaBetaScore resultIterative = alphaBeta.SearchIterative(new Node(initialGameState, CalendarSimulator()), depth, -999999, 999999);
+	CalendarSimulator calendarSimulator;
+	ISearchNode * initialNode = new Node(initialGameState, calendarSimulator);
+	AlphaBetaScore resultIterative = alphaBeta.SearchIterative(initialNode, depth, -999999, 999999);
+	delete initialNode;
 
-	AlphaBetaScore resultRecursive = alphaBeta.SearchRecursive(Node(initialGameState, CalendarSimulator()), depth, -999999, 999999);
+	AlphaBetaScore resultRecursive = alphaBeta.SearchRecursive(Node(initialGameState, calendarSimulator), depth, -999999, 999999);
+
+	assert(resultIterative == resultRecursive);
 
 	timer.stop();
 

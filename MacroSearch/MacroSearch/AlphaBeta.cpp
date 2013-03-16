@@ -34,7 +34,7 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 	// (Fifth rule)
 	while (!recursionStack.empty())
 	{
-		auto currentSnapshot = recursionStack.top();
+		AlphaBetaSnapshot &currentSnapshot = recursionStack.top();
 		recursionStack.pop();
 
 		// (Sixth rule)
@@ -59,7 +59,7 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 			}
 		case 1:
 			{
-				auto childSearchResult = returnValue;
+				AlphaBetaScore childSearchResult = returnValue;
 
 				if (currentSnapshot.Node->IsMaxPlayerMove())
 				{
@@ -116,16 +116,22 @@ AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBe
 {
 	if (depth == 0 || node.IsTerminal())
 	{
-		auto result = node.Eval();
+		AlphaBetaScore result = node.Eval();
 		return result;
 	}
 
-	auto maxPlayer = node.IsMaxPlayerMove();
+	bool maxPlayer = node.IsMaxPlayerMove();
 
-	auto children = node.GenerateChildren();
-	for each (auto child in children)
+	std::vector<ISearchNode*> children = node.GenerateChildren();
+
+	std::vector<ISearchNode*>::iterator childIter;
+	for(childIter = children.begin();
+		childIter != children.end();
+		++childIter)
 	{
-		auto childSearchResult = SearchRecursive(*child, depth-1, alpha, beta);
+		ISearchNode *child = *childIter;
+
+		AlphaBetaScore childSearchResult = SearchRecursive(*child, depth-1, alpha, beta);
 
 		if (maxPlayer)
 		{
@@ -161,9 +167,8 @@ AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBe
 void AlphaBeta::PushNextChild( AlphaBetaSnapshot &currentSnapshot, std::stack<AlphaBetaSnapshot> &recursionStack )
 {
 	// (Tenth rule)
-	// current snapshot need to process after
+	// current snapshot need to process after returning from the recursive call
 	currentSnapshot.Stage = 1;
-	// returning from the recursive call
 	// this MUST pushed into stack before 
 	recursionStack.push(currentSnapshot);
 

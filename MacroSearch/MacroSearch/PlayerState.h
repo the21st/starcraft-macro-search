@@ -4,6 +4,9 @@
 #include "Production.h"
 #include "Action.h"
 
+typedef std::vector<Unit> UnitVector;
+typedef std::vector<Production> ProductionVector;
+
 class PlayerState
 {
 public:
@@ -24,7 +27,7 @@ public:
 	float _armyStrength;
 	int _workerCount;
 
-	std::vector<Unit> _buildingsOwned;
-	std::vector<Production> _currentProduction;
+	UnitVector _buildingsOwned;
+	ProductionVector _currentProduction;
 };
 

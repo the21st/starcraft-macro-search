@@ -59,11 +59,12 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 {
 	bool built = false;
 
-	for(auto it = playerState._currentProduction.begin();
+	ProductionVector::iterator it;
+	for(it = playerState._currentProduction.begin();
 		it != playerState._currentProduction.end();
 		++it)
 	{
-		auto & production = *it;
+		Production & production = *it;
 		production._timeToBuild -= deltaTime;
 		if (production._timeToBuild <= 0)
 		{
@@ -91,7 +92,7 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 	{
 		if (playerState._currentProduction[i]._timeToBuild <= 0)
 		{
-			auto deleteIter = playerState._currentProduction.begin() + i;
+			ProductionVector::iterator deleteIter = playerState._currentProduction.begin() + i;
 			playerState._currentProduction.erase(deleteIter);
 		}
 	}

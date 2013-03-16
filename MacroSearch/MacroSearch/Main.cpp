@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[])
 {
-	//BWAPI::BWAPI_init();
+	BWAPI::BWAPI_init();
 
 	GameState initialGameState;
 	initialGameState._minPlayerState._workerCount = 4;
@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	initialGameState._maxPlayerState._workerCount = 3;
 	initialGameState._maxPlayerState._buildingsOwned.push_back(Nexus);
 
-	auto alphaBeta = AlphaBeta();
+	AlphaBeta alphaBeta;
 
 	Timer timer;
 	timer.start();
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	timer.stop();
 
-	auto time = timer.getElapsedTime();
+	double time = timer.getElapsedTime();
 
 	float averageBranchingFactor = (float)totalDecisions / (float)totalVisitedNonTerminalNodes;
 

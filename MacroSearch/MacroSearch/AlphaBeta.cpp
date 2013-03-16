@@ -34,7 +34,7 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 	// (Fifth rule)
 	while (!recursionStack.empty())
 	{
-		AlphaBetaSnapshot &currentSnapshot = recursionStack.top();
+		AlphaBetaSnapshot currentSnapshot = recursionStack.top();
 		recursionStack.pop();
 
 		// (Sixth rule)

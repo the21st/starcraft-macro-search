@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	AlphaBetaScore resultIterative = alphaBeta.SearchIterative(initialNode, depth, -999999, 999999);
 	delete initialNode;
 
-	//AlphaBetaScore resultRecursive = alphaBeta.SearchRecursive(Node(initialGameState, CalendarSimulator()), depth, -999999, 999999);
+	AlphaBetaScore resultRecursive = alphaBeta.SearchRecursive(Node(initialGameState, CalendarSimulator()), depth, -999999, 999999);
 
 	timer.stop();
 

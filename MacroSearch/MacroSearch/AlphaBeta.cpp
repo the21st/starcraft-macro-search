@@ -1,27 +1,7 @@
 #pragma once
 
-#include <stack>
 #include "AlphaBeta.h"
 
-// made using the recursion to explicit stack guide at
-// http://www.codeproject.com/Articles/418776/How-to-replace-recursive-functions-using-stack-and
-
-// (First rule)
-struct AlphaBetaSnapshot
-{
-	// parameters
-	ISearchNode * Node;
-	int Depth;
-	AlphaBetaScore Alpha;
-	AlphaBetaScore Beta;
-
-	// local variables
-	std::vector<ISearchNode*> Children;
-
-	// control variables
-	int Stage;
-	int ChildIndex;
-};
 
 AlphaBeta::AlphaBeta(void)
 {
@@ -47,7 +27,7 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 	initialSnapshot.Alpha = alpha;
 	initialSnapshot.Beta = beta;
 	initialSnapshot.Stage = 0; // set the value as initial stage
-	initialSnapshot.ChildIndex = -1; // set the value as initial stage
+	initialSnapshot.ChildIndex = 0; // set the value as initial stage
 
 	recursionStack.push(initialSnapshot);
 
@@ -70,31 +50,13 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 
 				currentSnapshot.Children = currentSnapshot.Node->GenerateChildren();
 
-				// (Tenth rule)
-				// current snapshot need to process after
-				currentSnapshot.Stage = 1;
-				currentSnapshot.ChildIndex = 0;
-				// returning from the recursive call
-				// this MUST pushed into stack before 
-				recursionStack.push(currentSnapshot);
-			
-				// Create a new snapshot for calling itself
-				// Search(child, currentSnapshot.Depth - 1, currentSnapshot.Alpha, currentSnapshot.Beta)
-				AlphaBetaSnapshot newSnapshot;
-				newSnapshot.Node = currentSnapshot.Children[currentSnapshot.ChildIndex];
-				newSnapshot.Depth = currentSnapshot.Depth - 1;
-				newSnapshot.Alpha = currentSnapshot.Alpha;
-				newSnapshot.Beta = currentSnapshot.Beta;
+				PushNextChild(currentSnapshot, recursionStack);
 
-				// since it will start from the beginning of the function, give the initial stage
-				newSnapshot.Stage = 0;
-				recursionStack.push(newSnapshot);
 				continue;
 
 				break;
 			}
 		case 1:
-
 			{
 				auto childSearchResult = returnValue;
 
@@ -115,24 +77,8 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 					{
 						// NOT PRUNED ! push next child
 
-						// (Tenth rule)
-						// current snapshot need to process after
-						currentSnapshot.Stage = 1;
-						// returning from the recursive call
-						// this MUST pushed into stack before 
-						recursionStack.push(currentSnapshot);
+						PushNextChild(currentSnapshot, recursionStack);
 
-						// Create a new snapshot for calling itself
-						// Search(child, currentSnapshot.Depth - 1, currentSnapshot.Alpha, currentSnapshot.Beta)
-						AlphaBetaSnapshot nextSnapshot;
-						nextSnapshot.Node = currentSnapshot.Children[currentSnapshot.ChildIndex];
-						nextSnapshot.Depth = currentSnapshot.Depth - 1;
-						nextSnapshot.Alpha = currentSnapshot.Alpha;
-						nextSnapshot.Beta = currentSnapshot.Beta;
-
-						// since it will start from the beginning of the function, give the initial stage
-						nextSnapshot.Stage = 0;
-						recursionStack.push(nextSnapshot);
 						continue;
 					}
 					else
@@ -233,4 +179,26 @@ AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBe
 	{
 		return beta;
 	}
+}
+
+void AlphaBeta::PushNextChild( AlphaBetaSnapshot &currentSnapshot, std::stack<AlphaBetaSnapshot> &recursionStack )
+{
+	// (Tenth rule)
+	// current snapshot need to process after
+	currentSnapshot.Stage = 1;
+	// returning from the recursive call
+	// this MUST pushed into stack before 
+	recursionStack.push(currentSnapshot);
+
+	// Create a new snapshot for calling itself
+	// "emulated" call: Search(child, currentSnapshot.Depth - 1, currentSnapshot.Alpha, currentSnapshot.Beta)
+	AlphaBetaSnapshot nextSnapshot;
+	nextSnapshot.Node = currentSnapshot.Children[currentSnapshot.ChildIndex];
+	nextSnapshot.Depth = currentSnapshot.Depth - 1;
+	nextSnapshot.Alpha = currentSnapshot.Alpha;
+	nextSnapshot.Beta = currentSnapshot.Beta;
+
+	// since it will start from the beginning of the function, give the initial stage
+	nextSnapshot.Stage = 0;
+	recursionStack.push(nextSnapshot);
 }

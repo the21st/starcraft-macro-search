@@ -36,5 +36,7 @@ public:
 private:
 
 	void PushNextChild( AlphaBetaSnapshot &currentSnapshot, std::stack<AlphaBetaSnapshot> &recursionStack );
+
+	AlphaBetaScore FinishUp( AlphaBetaSnapshot &currentSnapshot );
 };
 

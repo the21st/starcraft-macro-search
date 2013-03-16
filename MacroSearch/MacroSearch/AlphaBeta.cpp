@@ -86,40 +86,16 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 					{
 						// PRUNED !
 
-						for (size_t i = 0; i < currentSnapshot.Children.size(); i++)
-						{
-							delete currentSnapshot.Children[i];
-						}
+						returnValue = FinishUp(currentSnapshot);
 
-						if (currentSnapshot.Node->IsMaxPlayerMove())
-						{
-							returnValue = currentSnapshot.Alpha;
-							continue;
-						}
-						else
-						{
-							returnValue = currentSnapshot.Beta;
-							continue;
-						}
+						continue;
 					}
 				}
 				else
 				{
-					for (size_t i = 0; i < currentSnapshot.Children.size(); i++)
-					{
-						delete currentSnapshot.Children[i];
-					}
+					returnValue = FinishUp(currentSnapshot);
 
-					if (currentSnapshot.Node->IsMaxPlayerMove())
-					{
-						returnValue = currentSnapshot.Alpha;
-						continue;
-					}
-					else
-					{
-						returnValue = currentSnapshot.Beta;
-						continue;
-					}
+					continue;
 				}
 
 				break;
@@ -202,4 +178,21 @@ void AlphaBeta::PushNextChild( AlphaBetaSnapshot &currentSnapshot, std::stack<Al
 	// since it will start from the beginning of the function, give the initial stage
 	nextSnapshot.Stage = 0;
 	recursionStack.push(nextSnapshot);
+}
+
+AlphaBetaScore AlphaBeta::FinishUp( AlphaBetaSnapshot &currentSnapshot )
+{
+	for (size_t i = 0; i < currentSnapshot.Children.size(); i++)
+	{
+		delete currentSnapshot.Children[i];
+	}
+
+	if (currentSnapshot.Node->IsMaxPlayerMove())
+	{
+		return currentSnapshot.Alpha;
+	}
+	else
+	{
+		return currentSnapshot.Beta;
+	}
 }

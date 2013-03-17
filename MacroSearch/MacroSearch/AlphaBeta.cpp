@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AlphaBeta.h"
+#include "boost\foreach.hpp"
 
 
 AlphaBeta::AlphaBeta(void)
@@ -124,13 +125,8 @@ AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBe
 
 	std::vector<ISearchNode*> children = node.GenerateChildren();
 
-	std::vector<ISearchNode*>::iterator childIter;
-	for(childIter = children.begin();
-		childIter != children.end();
-		++childIter)
+	BOOST_FOREACH (ISearchNode *child, children)
 	{
-		ISearchNode *child = *childIter;
-
 		AlphaBetaScore childSearchResult = SearchRecursive(*child, depth-1, alpha, beta);
 
 		if (maxPlayer)

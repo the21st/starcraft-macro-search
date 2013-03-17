@@ -2,6 +2,7 @@
 
 #include "GameState.h"
 #include <assert.h>
+#include "boost\foreach.hpp"
 
 GameState::GameState(void)
 	:
@@ -59,12 +60,8 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 {
 	bool built = false;
 
-	ProductionVector::iterator it;
-	for(it = playerState._currentProduction.begin();
-		it != playerState._currentProduction.end();
-		++it)
+	BOOST_FOREACH (Production &production, playerState._currentProduction)
 	{
-		Production & production = *it;
 		production._timeToBuild -= deltaTime;
 		if (production._timeToBuild <= 0)
 		{
@@ -92,7 +89,7 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 	{
 		if (playerState._currentProduction[i]._timeToBuild <= 0)
 		{
-			ProductionVector::iterator deleteIter = playerState._currentProduction.begin() + i;
+			std::vector<Production>::iterator deleteIter = playerState._currentProduction.begin() + i;
 			playerState._currentProduction.erase(deleteIter);
 		}
 	}

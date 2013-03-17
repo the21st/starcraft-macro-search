@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "CalendarSimulator.h"
 #include "Action.h"
+#include <boost/foreach.hpp>
 
 //const GameTime droneBuildTime = BWAPI::UnitTypes::Protoss_Probe.buildTime();
 const GameTime droneBuildTime = 300;
@@ -106,14 +107,10 @@ GameState CalendarSimulator::GetNextState( const GameState & currentState, Actio
 
 	// "simulate time" for newState
 	GameTime minTimeToBuild = 1000;
-	Production * minProduction;
+	const Production * minProduction;
 
-	ProductionVector::iterator productionIter;
-	for(productionIter = newState._minPlayerState._currentProduction.begin();
-		productionIter != newState._minPlayerState._currentProduction.end();
-		++productionIter)
+	BOOST_FOREACH (const Production &production, newState._minPlayerState._currentProduction)
 	{
-		Production& production = *productionIter;
 		if (production._timeToBuild < minTimeToBuild)
 		{
 			minTimeToBuild = production._timeToBuild;
@@ -121,11 +118,8 @@ GameState CalendarSimulator::GetNextState( const GameState & currentState, Actio
 		}
 	}
 
-	for(productionIter = newState._maxPlayerState._currentProduction.begin();
-		productionIter != newState._maxPlayerState._currentProduction.end();
-		++productionIter)
+	BOOST_FOREACH (const Production &production, newState._maxPlayerState._currentProduction)
 	{
-		Production& production = *productionIter;
 		if (production._timeToBuild < minTimeToBuild)
 		{
 			minTimeToBuild = production._timeToBuild;

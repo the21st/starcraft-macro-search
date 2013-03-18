@@ -10,7 +10,7 @@ public:
 	PlayerState(void);
 	~PlayerState(void);
 
-	std::vector<Unit> GetBuildingsOwned() const { return _buildingsOwned; }
+	std::vector<BWAPI::UnitType> GetBuildingsOwned() const { return _buildingsOwned; }
 
 	float GetArmyStrength() const { return _armyStrength; }
 	void SetArmyStrength(float val) { _armyStrength = val; }
@@ -24,7 +24,7 @@ public:
 	float _armyStrength;
 	int _workerCount;
 
-	std::vector<Unit> _buildingsOwned;
+	std::vector<BWAPI::UnitType> _buildingsOwned;
 	std::vector<Production> _currentProduction;
 };
 

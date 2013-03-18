@@ -14,16 +14,16 @@ int main(int argc, char* argv[])
 
 	GameState initialGameState;
 	initialGameState._minPlayerState._workerCount = 4;
-	initialGameState._minPlayerState._buildingsOwned.push_back(Nexus);
-	initialGameState._maxPlayerState._workerCount = 3;
-	initialGameState._maxPlayerState._buildingsOwned.push_back(Nexus);
+	initialGameState._minPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Nexus);
+	initialGameState._maxPlayerState._workerCount = 4;
+	initialGameState._maxPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Nexus);
 
 	AlphaBeta alphaBeta;
 
 	Timer timer;
 	timer.start();
 
-	int depth = 10;
+	int depth = 11;
 
 	CalendarSimulator calendarSimulator;
 	ISearchNode * initialNode = new Node(initialGameState, calendarSimulator);

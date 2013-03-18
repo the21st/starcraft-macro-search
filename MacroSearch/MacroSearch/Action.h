@@ -9,13 +9,3 @@ enum Action
 	BuildZealot,
 	Attack
 };
-
-enum Unit
-{
-	Probe,
-	Zealot,
-	Pylon,
-	Gateway,
-	Nexus
-};
-

@@ -66,21 +66,24 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 		if (production._timeToBuild <= 0)
 		{
 			built = true;
-			switch (production._unitType)
+
+			playerState._supplyMax += production._unitType.supplyProvided();
+
+			if (production._unitType.isBuilding())
 			{
-			case Probe:
+				playerState._buildingsOwned.push_back(production._unitType);
+			}
+			else if (production._unitType.isWorker())
+			{
 				playerState._workerCount++;
-				break;
-			case Zealot:
+			}
+			else
+			{
+				// by elimination, it has to be an army unit
 				playerState._armyStrength++;
-				break;
-			case Pylon:
-				playerState._buildingsOwned.push_back(Pylon);
-				playerState._supplyMax += 8;
-				break;
-			case Gateway:
-				playerState._buildingsOwned.push_back(Gateway);
-				break;
+
+				// so it has to be a zealot (for now)
+				assert(production._unitType.getName().find("ealot") != std::string::npos);
 			}
 		}
 	}

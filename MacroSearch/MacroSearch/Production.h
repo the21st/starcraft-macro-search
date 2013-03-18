@@ -6,13 +6,13 @@
 class Production
 {
 public:
-	Production(Unit unitType, GameTime timeToBuild);
+	Production(BWAPI::UnitType unitType);
 	~Production(void);
 	
-	Unit GetUnitType() const { return _unitType; }
+	BWAPI::UnitType GetUnitType() const { return _unitType; }
 	GameTime GetTimeToBuild() const { return _timeToBuild; }
 
-	Unit _unitType;
+	BWAPI::UnitType _unitType;
 	GameTime _timeToBuild;
 };
 

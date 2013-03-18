@@ -26,48 +26,48 @@ GameState CalendarSimulator::GetNextState( const GameState & currentState, Actio
 	case BuildProbe:
 		if (maxPlayerAction)
 		{
-			newState._maxPlayerState._currentProduction.push_back(Production(Probe, droneBuildTime));
+			newState._maxPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Probe));
 			newState._maxPlayerState._mineralAmount -= 50;
 		}
 		else
 		{
-			newState._minPlayerState._currentProduction.push_back(Production(Probe, droneBuildTime));
+			newState._minPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Probe));
 			newState._minPlayerState._mineralAmount -= 50;
 		}
 		break;
 	case BuildPylon:
 		if (maxPlayerAction)
 		{
-			newState._maxPlayerState._currentProduction.push_back(Production(Pylon, 600));
+			newState._maxPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Pylon));
 			newState._maxPlayerState._mineralAmount -= 100;
 		}
 		else
 		{
-			newState._minPlayerState._currentProduction.push_back(Production(Pylon, 600));
+			newState._minPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Pylon));
 			newState._minPlayerState._mineralAmount -= 100;
 		}
 		break;
 	case BuildGateway:
 		if (maxPlayerAction)
 		{
-			newState._maxPlayerState._currentProduction.push_back(Production(Gateway, 1000));
+			newState._maxPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Gateway));
 			newState._maxPlayerState._mineralAmount -= 150;
 		}
 		else
 		{
-			newState._minPlayerState._currentProduction.push_back(Production(Gateway, 1000));
+			newState._minPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Gateway));
 			newState._minPlayerState._mineralAmount -= 150;
 		}
 		break;
 	case BuildZealot:
 		if (maxPlayerAction)
 		{
-			newState._maxPlayerState._currentProduction.push_back(Production(Zealot, 400));
+			newState._maxPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Zealot));
 			newState._maxPlayerState._mineralAmount -= 100;
 		}
 		else
 		{
-			newState._minPlayerState._currentProduction.push_back(Production(Zealot, 400));
+			newState._minPlayerState._currentProduction.push_back(Production(BWAPI::UnitTypes::Protoss_Zealot));
 			newState._minPlayerState._mineralAmount -= 100;
 		}
 		break;

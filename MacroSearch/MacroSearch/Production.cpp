@@ -2,10 +2,10 @@
 
 #include "Production.h"
 
-Production::Production( Unit unitType, GameTime timeToBuild )
+Production::Production( BWAPI::UnitType unitType )
 	:
 	_unitType(unitType),
-	_timeToBuild(timeToBuild)
+	_timeToBuild(unitType.buildTime())
 {
 
 }

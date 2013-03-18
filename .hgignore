@@ -9,3 +9,10 @@ MacroSearch/Release
 **.user
 Debug
 **.orig
+Documentation/Thesis/thesis.pdf
+Documentation/Thesis/*.aux
+Documentation/Thesis/*.out
+Documentation/Thesis/*.toc
+Documentation/Thesis/*.log
+Documentation/Thesis/*.blg
+Documentation/Thesis/*.bbl

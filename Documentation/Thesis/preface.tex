@@ -7,11 +7,28 @@ One of the major genres on the video-game market are Real-time strategy (RTS) ga
 
 When talking about skills and techniques, professional RTS players use the terms micromanagement (micro) and macromanagement (macro), borrowed from the business sphere. Micro concerns local, short-term decisions and actions, such as commanding a single unit to attack a specific enemy unit or to move slightly in order to avoid damage from an explosion. Macro, on the other hand, encompasses long-term, global, strategic decisions, for example investing part of gathered resources into economic growth or ordering the player's army from defending her base to attack the enemy.
 
+Artificial intelligence (AI) systems are necessary to provide a single-player mode in RTS games. AI developers have to tackle both micro and macro when designing artificial opponents.
+
 \section{Artificial intelligence in RTS games}
 
+Most commercial games use scripted AI opponents. Scripts are sets of straightforward rules. For instance, a rule for micromanaging a combat unit is ``always attack the closest enemy'' and one for macromanagement can be ``build a new production facility at the 5:00 mark''. Using scripts results in rigid, predictable artificial players. To be able to provide a challenge even for the best players, companies often resort to giving the AI opponents extra benefits (cheating). Moreover, writing AI scripts is a time-consuming and costly effort.
 
+An alternative to using scripted AI is to employ some form of adaptive techniques.
 
-1. RTS games
-2. existing AI in RTS games - commercial and research
-3. My work - fill that hole
-4. Outline of the thesis
+David Churchill et al. [1] have used a variant of the minimax heuristic search to drive micro decision-making in combat sitiations. They successfully outperform even the best scripted strategy, though only with a 58\% win ratio. However, this approach has scalability issues, as only combat scenarios with 8 versus 8 units are feasible in a real-time environment.
+
+Creating a state-transition model for the minimax algorithm in a micro case is straightforward, because atomic unit actions represent transitions in the game state. That is not the case for macro behavior. To model strategic situations, a high-level abstraction of the game is almost certainly required. This is due to the complex nature of RTS games. A typical situation in such a game includes hundreds of units and tens of buildings, all operating in real-time.
+
+Concerning adaptive macro, Sailer et al. [2] explored using a planning framework based on strategy simulation and Nash-equilibrium approximation. They focused on army deployment, which is a sub-problem of macro. They achieve an improvement over scripted AI systems both in performance and in quality of the decisions.
+
+\section{Goals of this thesis}
+
+The objective of this work is to design an abstract model of a one-versus-one StarCraft match. The next goal is to use this model in a classical adversarial search technique, such as the minimax algorithm with alpha-beta pruning.
+
+The model needs to be high-level enough to be used for an actual AI opponent and low-level enough to still correspond with the actual game.
+
+The AI opponent will be implemented and tested using the BWAPI framework [3].
+
+\section{Outline of the thesis}
+
+The fundamentals and some necessary expert knowledge of StarCraft are provided in Chapter 2. The design of the abstract model is explained and justified in Chapter 3. Chapter 4 contains the implementation of the algorithm. Testing environment and results are described in Chapter 5. A discussion of these results can be found in Chapter 6.

@@ -23,10 +23,11 @@ bool GameState::IsGameEnded() const
 
 AlphaBetaScore GameState::Evaluate() const
 {
-	return (_maxPlayerState._armyStrength - _minPlayerState._armyStrength) +
-		   0.3f * (_maxPlayerState._workerCount - _minPlayerState._workerCount) + 
-		   2 * (_maxPlayerState._buildingsOwned.size() - _minPlayerState._buildingsOwned.size()) +
-		   0.05f * (_maxPlayerState._mineralAmount - _minPlayerState._mineralAmount);
+	int buildingsDifference = (int)_maxPlayerState._buildingsOwned.size() - (int)_minPlayerState._buildingsOwned.size();
+	return 5 * (_maxPlayerState._armyStrength - _minPlayerState._armyStrength) +
+		   0.5f * (_maxPlayerState._workerCount - _minPlayerState._workerCount) + 
+		   2 * (buildingsDifference);
+		   //+ 0.009f * (_maxPlayerState._mineralAmount - _minPlayerState._mineralAmount);
 }
 
 bool GameState::IsMaxPlayerMove() const
@@ -146,6 +147,12 @@ GameTime MacroSearch::GameState::GetTimeUntilNextAction( bool &maxPlayerAction )
 	}
 
 	GameTime timeUntilNextMinAction = _minPlayerState.GetTimeUntilNextAction();
+
+	if (_gameTime == 0)
+	{
+		timeUntilNextMinAction = 1;
+	}
+
 	if (timeUntilNextMinAction < result)
 	{
 		result = timeUntilNextMinAction;

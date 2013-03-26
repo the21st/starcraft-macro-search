@@ -22,12 +22,9 @@ bool Node::IsTerminal() const
 	return _gameState.IsGameEnded();
 }
 
-AlphaBetaResult Node::Eval() const
+AlphaBetaScore Node::Eval() const
 {
-	AlphaBetaResult result;
-	result.Score = _gameState.Evaluate();
-
-	return result;
+	return _gameState.Evaluate();
 }
 
 bool Node::IsMaxPlayerMove() const
@@ -51,6 +48,7 @@ std::vector<ISearchNode*> Node::GenerateChildren()
 	if (playerToMove._mineralAmount >= 100 && 
 		playerToMove.HowManyIsProducing(BWAPI::UnitTypes::Protoss_Zealot) < playerToMove.HowManyBuildingsOwned(BWAPI::UnitTypes::Protoss_Gateway))
 	{
+		AddChildFromAction(BuildZealot, children);
 	}
 
 	if (playerToMove._mineralAmount >= 100 &&

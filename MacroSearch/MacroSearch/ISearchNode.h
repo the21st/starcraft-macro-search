@@ -13,7 +13,7 @@ public:
 
 	virtual bool IsTerminal() const = 0;
 	virtual bool IsMaxPlayerMove() const = 0;
-	virtual MacroSearch::AlphaBetaResult Eval() const = 0;
+	virtual AlphaBetaScore Eval() const = 0;
 	virtual std::vector<ISearchNode*> GenerateChildren() = 0;
 
 	MacroSearch::Action GeneratingAction;

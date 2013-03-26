@@ -22,11 +22,12 @@ public:
 
 	virtual bool IsTerminal() const;
 	virtual bool IsMaxPlayerMove() const;
-	virtual AlphaBetaResult Eval() const;
+	virtual AlphaBetaScore Eval() const;
 	virtual std::vector<ISearchNode*> GenerateChildren();
 
-private:
 	GameState _gameState;
+
+private:
 	const ISimulator & _simulator;
 
 	void AddChildFromAction( Action action, std::vector<ISearchNode*> &children );

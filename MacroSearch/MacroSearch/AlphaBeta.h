@@ -2,6 +2,10 @@
 
 #include <stack>
 #include "ISearchNode.h"
+#include "AlphaBetaResult.h"
+
+namespace MacroSearch
+{
 
 // (First rule)
 struct AlphaBetaSnapshot
@@ -29,9 +33,9 @@ public:
 
 	// made using the recursion to explicit stack guide at
 	// http://www.codeproject.com/Articles/418776/How-to-replace-recursive-functions-using-stack-and
-	AlphaBetaScore SearchIterative(ISearchNode * state, int depth, float alpha, float beta);
+	AlphaBetaResult SearchIterative(ISearchNode * state, int depth, float alpha, float beta);
 
-	AlphaBetaScore SearchRecursive(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta);
+	AlphaBetaResult SearchRecursive(ISearchNode & node, int depth, AlphaBetaResult alpha, AlphaBetaResult beta);
 
 private:
 
@@ -40,3 +44,4 @@ private:
 	AlphaBetaScore FinishUp( AlphaBetaSnapshot &currentSnapshot );
 };
 
+}

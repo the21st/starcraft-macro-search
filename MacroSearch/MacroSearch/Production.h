@@ -3,10 +3,14 @@
 #include "Common.h"
 #include "Action.h"
 
+namespace MacroSearch
+{
+
 class Production
 {
 public:
 	Production(BWAPI::UnitType unitType);
+	Production(BWAPI::UnitType unitType, GameTime remainingBuildTime);
 	~Production(void);
 	
 	BWAPI::UnitType GetUnitType() const { return _unitType; }
@@ -16,3 +20,4 @@ public:
 	GameTime _timeToBuild;
 };
 
+}

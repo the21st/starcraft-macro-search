@@ -4,6 +4,11 @@
 #include "Production.h"
 #include "Action.h"
 
+namespace MacroSearch
+{
+
+const float MINERALS_PER_WORKER_PER_FRAME = 0.045f;
+
 class PlayerState
 {
 public:
@@ -16,7 +21,7 @@ public:
 	void SetArmyStrength(float val) { _armyStrength = val; }
 
 	float _mineralAmount; 
-	float MineralIncome() {return _workerCount * 0.01f;}
+	float MineralIncomePerFrame() {return _workerCount * MINERALS_PER_WORKER_PER_FRAME;}
 
 	float _supplyCurrent; 
 	float _supplyMax; 
@@ -26,5 +31,11 @@ public:
 
 	std::vector<BWAPI::UnitType> _buildingsOwned;
 	std::vector<Production> _currentProduction;
+
+	int HowManyIsProducing(BWAPI::UnitType unitType) const;
+
+	int HowManyBuildingsOwned(BWAPI::UnitType unitType) const;
+	GameTime GetTimeUntilNextAction();
 };
 
+}

@@ -2,6 +2,9 @@
 
 #include "ISimulator.h"
 
+namespace MacroSearch
+{
+
 class CalendarSimulator :
 	public ISimulator
 {
@@ -12,3 +15,4 @@ public:
 	virtual GameState GetNextState(const GameState & currentState, Action action, bool maxPlayerAction) const;
 };
 
+}

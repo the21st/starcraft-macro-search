@@ -1,4 +1,7 @@
 #include "Node.h"
+#include <algorithm>
+
+using namespace MacroSearch;
 
 int totalDecisions = 0;
 int totalVisitedNonTerminalNodes = 0;
@@ -19,9 +22,12 @@ bool Node::IsTerminal() const
 	return _gameState.IsGameEnded();
 }
 
-AlphaBetaScore Node::Eval() const
+AlphaBetaResult Node::Eval() const
 {
-	return _gameState.Evaluate();
+	AlphaBetaResult result;
+	result.Score = _gameState.Evaluate();
+
+	return result;
 }
 
 bool Node::IsMaxPlayerMove() const
@@ -33,30 +39,47 @@ std::vector<ISearchNode*> Node::GenerateChildren()
 {
 	std::vector<ISearchNode*> children;
 
-	if (_gameState.GetPlayerToMove()._armyStrength > 0)
+	const PlayerState &playerToMove = _gameState.GetPlayerToMove();
+	const std::vector<BWAPI::UnitType> &buildingsOwned = playerToMove._buildingsOwned;
+
+	if (playerToMove._mineralAmount >= 50 && 
+		playerToMove.HowManyIsProducing(BWAPI::UnitTypes::Protoss_Probe) < playerToMove.HowManyBuildingsOwned(BWAPI::UnitTypes::Protoss_Nexus))
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, Attack, _gameState._isMaxPlayerMove), _simulator));
+		AddChildFromAction(BuildProbe, children);
 	}
 
-	if (_gameState.GetPlayerToMove()._mineralAmount >= 50)
+	if (playerToMove._mineralAmount >= 100 && 
+		playerToMove.HowManyIsProducing(BWAPI::UnitTypes::Protoss_Zealot) < playerToMove.HowManyBuildingsOwned(BWAPI::UnitTypes::Protoss_Gateway))
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildProbe, _gameState._isMaxPlayerMove), _simulator));
 	}
 
-	if (_gameState.GetPlayerToMove()._mineralAmount >= 100)
+	if (playerToMove._mineralAmount >= 100 &&
+		playerToMove._workerCount > 0)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildZealot, _gameState._isMaxPlayerMove), _simulator));
+		AddChildFromAction(BuildPylon, children);
 	}
 
-	if (_gameState.GetPlayerToMove()._mineralAmount >= 150)
+	if (playerToMove._mineralAmount >= 150 &&
+		playerToMove.HowManyBuildingsOwned(BWAPI::UnitTypes::Protoss_Pylon) > 0 &&
+		playerToMove._workerCount > 0)
 	{
-		children.push_back(new Node(_simulator.GetNextState(_gameState, BuildGateway, _gameState._isMaxPlayerMove), _simulator));
+		AddChildFromAction(BuildGateway, children);
 	}
 
-	children.push_back(new Node(_simulator.GetNextState(_gameState, None, _gameState._isMaxPlayerMove), _simulator));
+	AddChildFromAction(None, children);
 
 	totalVisitedNonTerminalNodes++;
 	totalDecisions += children.size();
 
 	return children;
+}
+
+void Node::AddChildFromAction( Action action, std::vector<ISearchNode*> &children )
+{
+	Node *child = new Node(_simulator.GetNextState(_gameState, action, _gameState._isMaxPlayerMove), _simulator);
+	child->GeneratingAction = action;
+
+	child->WasMaxPlayerAction = _gameState.GetIndexOfPlayerToMove() == 0;
+
+	children.push_back(child);
 }

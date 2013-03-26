@@ -4,6 +4,8 @@
 #include <assert.h>
 #include "boost\foreach.hpp"
 
+using namespace MacroSearch;
+
 GameState::GameState(void)
 	:
 	_gameTime(0)
@@ -36,20 +38,23 @@ void GameState::Simulate( GameTime deltaTime )
 {
 	_gameTime += deltaTime;
 
-	_minPlayerState._mineralAmount += deltaTime * _minPlayerState.MineralIncome();
-	_maxPlayerState._mineralAmount += deltaTime * _maxPlayerState.MineralIncome();
+	_minPlayerState._mineralAmount += deltaTime * _minPlayerState.MineralIncomePerFrame();
+	assert(_minPlayerState._mineralAmount >= 0);
+
+	_maxPlayerState._mineralAmount += deltaTime * _maxPlayerState.MineralIncomePerFrame();
+	assert(_maxPlayerState._mineralAmount >= 0);
 
 	bool atLeastOneProduced = false;
 
 	if (UpdatePlayerProduction(deltaTime, _minPlayerState))
 	{
-		_isMaxPlayerMove = true;
+		//_isMaxPlayerMove = true;
 		atLeastOneProduced = true;
 	}
 
 	if (UpdatePlayerProduction(deltaTime, _maxPlayerState))
 	{
-		_isMaxPlayerMove = false;
+		//_isMaxPlayerMove = false;
 		atLeastOneProduced = true;
 	}
 
@@ -109,5 +114,55 @@ const PlayerState & GameState::GetPlayerToMove() const
 	else
 	{
 		return _minPlayerState;
+	}
+}
+
+MacroSearch::PlayerState& MacroSearch::GameState::GetPlayerState( const int playerID )
+{
+	switch (playerID)
+	{
+	case Players::Player_One:
+		return _maxPlayerState;
+
+	case Players::Player_Two:
+		return _minPlayerState;
+
+	default:
+		throw 1;
+	}
+}
+
+GameTime MacroSearch::GameState::GetTimeUntilNextAction( bool &maxPlayerAction )
+{
+	GameTime result = 1000;
+
+	maxPlayerAction = rand() % 2 == 0;
+
+	GameTime timeUntilNextMaxAction = _maxPlayerState.GetTimeUntilNextAction();
+	if (timeUntilNextMaxAction < result)
+	{
+		result = timeUntilNextMaxAction;
+		maxPlayerAction = true;
+	}
+
+	GameTime timeUntilNextMinAction = _minPlayerState.GetTimeUntilNextAction();
+	if (timeUntilNextMinAction < result)
+	{
+		result = timeUntilNextMinAction;
+		maxPlayerAction = false;
+	}
+
+	return result;
+}
+
+const int & MacroSearch::GameState::GetIndexOfPlayerToMove() const
+{
+	if (_isMaxPlayerMove)
+	{
+		return 0;
+	}
+	else
+	{
+		return 1;
 	}
 }

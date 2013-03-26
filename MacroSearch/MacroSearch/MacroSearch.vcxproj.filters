@@ -59,5 +59,8 @@
     <ClInclude Include="ISearchNode.h">
       <Filter>Search</Filter>
     </ClInclude>
+    <ClInclude Include="AlphaBetaResult.h">
+      <Filter>Search</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

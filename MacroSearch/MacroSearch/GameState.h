@@ -3,6 +3,9 @@
 #include <vector>
 #include "PlayerState.h"
 
+namespace MacroSearch
+{
+
 class GameState
 {
 public:
@@ -21,7 +24,15 @@ public:
 
 	const PlayerState & GetPlayerToMove() const;
 
+	const int & GetIndexOfPlayerToMove() const;
+
+	PlayerState& GetPlayerState( const int playerID );
+
+	GameTime GetTimeUntilNextAction(bool &maxPlayerAction);
+
 private:
 	bool UpdatePlayerProduction( GameTime deltaTime, PlayerState & playerState );
 };
+
+}
 

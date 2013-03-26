@@ -3,6 +3,7 @@
 #include "AlphaBeta.h"
 #include "boost\foreach.hpp"
 
+using namespace MacroSearch;
 
 AlphaBeta::AlphaBeta(void)
 {
@@ -13,10 +14,56 @@ AlphaBeta::~AlphaBeta(void)
 {
 }
 
-AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
+AlphaBetaResult AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBetaResult alpha, AlphaBetaResult beta)
+{
+	if (depth == 0 || node.IsTerminal())
+	{
+		return node.Eval();
+	}
+
+	bool maxPlayer = node.IsMaxPlayerMove();
+
+	std::vector<ISearchNode*> children = node.GenerateChildren();
+
+	BOOST_FOREACH (ISearchNode *child, children)
+	{
+		AlphaBetaResult childSearchResult = SearchRecursive(*child, depth - 1, alpha, beta);
+
+		if (maxPlayer)
+		{
+			alpha = std::max(alpha, childSearchResult);
+		}
+		else
+		{
+			beta = std::min(beta, childSearchResult);
+		}
+
+		if (beta.Score <= alpha.Score)
+		{
+			// alpha or beta cut-off
+			break;
+		}
+	}
+
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		delete children[i];
+	}
+
+	if (maxPlayer)
+	{
+		return alpha;
+	}
+	else
+	{
+		return beta;
+	}
+}
+
+AlphaBetaResult AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
 {
 	// (Second rule)
-	AlphaBetaScore returnValue = 0;
+	AlphaBetaResult returnValue;
 
 	// (Third rule)
 	std::stack<AlphaBetaSnapshot> recursionStack;
@@ -60,15 +107,15 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 			}
 		case 1:
 			{
-				AlphaBetaScore childSearchResult = returnValue;
+				AlphaBetaResult childSearchResult = returnValue;
 
 				if (currentSnapshot.Node->IsMaxPlayerMove())
 				{
-					currentSnapshot.Alpha = std::max(currentSnapshot.Alpha, childSearchResult);
+					currentSnapshot.Alpha = std::max(currentSnapshot.Alpha, childSearchResult.Score);
 				}
 				else
 				{
-					currentSnapshot.Beta = std::min(currentSnapshot.Beta, childSearchResult);
+					currentSnapshot.Beta = std::min(currentSnapshot.Beta, childSearchResult.Score);
 				}
 
 				currentSnapshot.ChildIndex++;
@@ -87,14 +134,14 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 					{
 						// PRUNED !
 
-						returnValue = FinishUp(currentSnapshot);
+						returnValue.Score = FinishUp(currentSnapshot);
 
 						continue;
 					}
 				}
 				else
 				{
-					returnValue = FinishUp(currentSnapshot);
+					returnValue.Score = FinishUp(currentSnapshot);
 
 					continue;
 				}
@@ -111,53 +158,6 @@ AlphaBetaScore AlphaBeta::SearchIterative(ISearchNode * node, int depth, AlphaBe
 
 	// (Second rule)
 	return returnValue;
-}
-
-AlphaBetaScore AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaBetaScore alpha, AlphaBetaScore beta)
-{
-	if (depth == 0 || node.IsTerminal())
-	{
-		AlphaBetaScore result = node.Eval();
-		return result;
-	}
-
-	bool maxPlayer = node.IsMaxPlayerMove();
-
-	std::vector<ISearchNode*> children = node.GenerateChildren();
-
-	BOOST_FOREACH (ISearchNode *child, children)
-	{
-		AlphaBetaScore childSearchResult = SearchRecursive(*child, depth-1, alpha, beta);
-
-		if (maxPlayer)
-		{
-			alpha = std::max(alpha, childSearchResult);
-		}
-		else
-		{
-			beta = std::min(beta, childSearchResult);
-		}
-
-		if (beta <= alpha)
-		{
-			// alpha or beta cut-off
-			break;
-		}
-	}
-
-	for (size_t i = 0; i < children.size(); i++)
-	{
-		delete children[i];
-	}
-
-	if (maxPlayer)
-	{
-		return alpha;
-	}
-	else
-	{
-		return beta;
-	}
 }
 
 void AlphaBeta::PushNextChild( AlphaBetaSnapshot &currentSnapshot, std::stack<AlphaBetaSnapshot> &recursionStack )

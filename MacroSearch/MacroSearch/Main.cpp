@@ -15,17 +15,27 @@ int main(int argc, char* argv[])
 	BWAPI::BWAPI_init();
 
 	GameState initialGameState;
-	initialGameState._minPlayerState._workerCount = 3;
-	initialGameState._minPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Nexus);
-	initialGameState._maxPlayerState._workerCount = 4;
+	//initialGameState._maxPlayerState._workerCount = 4;
+	initialGameState._maxPlayerState._workerCount = 1;
+	//initialGameState._maxPlayerState._mineralAmount = 50;
+	initialGameState._maxPlayerState._mineralAmount = 500;
 	initialGameState._maxPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Nexus);
+	initialGameState._maxPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Pylon);
+
+	initialGameState._minPlayerState._workerCount = 2;
+	//initialGameState._minPlayerState._workerCount = 4;
+	initialGameState._minPlayerState._mineralAmount = 200;
+	//initialGameState._minPlayerState._mineralAmount = 50;
+	//initialGameState._minPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Nexus);
+	initialGameState._minPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Pylon);
+	initialGameState._minPlayerState._buildingsOwned.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 
 	AlphaBeta alphaBeta;
 
 	Timer timer;
 	timer.start();
 
-	int depth = 3;
+	int depth = 10;
 
 	CalendarSimulator calendarSimulator;
 	//ISearchNode * initialNode = new Node(initialGameState, calendarSimulator);
@@ -44,6 +54,7 @@ int main(int argc, char* argv[])
 
 	std::cout << time << " seconds" << std::endl;
 	std::cout << "Score: " << resultRecursive.Score << std::endl;
+	std::cout << "Action: " << resultRecursive.BestAction << std::endl;
 	std::cout << "Total nodes expanded: " << totalDecisions << std::endl;
 
 	std::cin.get();

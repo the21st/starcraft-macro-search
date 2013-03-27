@@ -3,6 +3,7 @@
 #include "Common.h"
 #include <list>
 #include "Action.h"
+#include "GameState.h"
 
 namespace MacroSearch
 {
@@ -10,6 +11,7 @@ namespace MacroSearch
 	{
 		AlphaBetaScore Score;
 		Action BestAction;
+		GameState FinalGameState;
 
 		bool operator <	(const AlphaBetaResult & otherResult) const { return Score < otherResult.Score; }
 		bool operator >	(const AlphaBetaResult & otherResult) const { return Score > otherResult.Score; }

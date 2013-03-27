@@ -2,6 +2,7 @@
 
 #include "AlphaBeta.h"
 #include "boost\foreach.hpp"
+#include "Node.h"
 
 using namespace MacroSearch;
 
@@ -18,7 +19,11 @@ AlphaBetaResult AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaB
 {
 	if (depth == 0 || node.IsTerminal())
 	{
-		return node.Eval();
+		AlphaBetaResult result;
+		result.Score = node.Eval();
+		result.BestAction = node.GeneratingAction;
+		result.FinalGameState = static_cast<Node*>(&node)->_gameState;
+		return result;
 	}
 
 	bool maxPlayer = node.IsMaxPlayerMove();
@@ -28,6 +33,7 @@ AlphaBetaResult AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaB
 	BOOST_FOREACH (ISearchNode *child, children)
 	{
 		AlphaBetaResult childSearchResult = SearchRecursive(*child, depth - 1, alpha, beta);
+		childSearchResult.BestAction = child->GeneratingAction;
 
 		if (maxPlayer)
 		{

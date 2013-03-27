@@ -65,10 +65,5 @@ GameTime PlayerState::GetTimeUntilNextAction()
 		result = std::min(result, timeUntilFiftyMinerals);
 	}
 
-	if (_currentProduction.empty() && _mineralAmount >= 50)
-	{
-		result = 1;
-	}
-
 	return result;
 }

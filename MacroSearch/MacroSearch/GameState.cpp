@@ -73,7 +73,7 @@ bool GameState::UpdatePlayerProduction( GameTime deltaTime, PlayerState & player
 		{
 			built = true;
 
-			playerState._supplyMax += production._unitType.supplyProvided();
+			playerState._supplyCapacity += production._unitType.supplyProvided();
 
 			if (production._unitType.isBuilding())
 			{

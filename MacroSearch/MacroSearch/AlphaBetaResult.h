@@ -9,8 +9,13 @@ namespace MacroSearch
 {
 	struct AlphaBetaResult
 	{
+		// the score of the utility function
 		AlphaBetaScore Score;
+
+		// what the first action leading to that utility function is
 		Action BestAction;
+
+		// the game state corresponding to this utility
 		GameState FinalGameState;
 
 		bool operator <	(const AlphaBetaResult & otherResult) const { return Score < otherResult.Score; }
@@ -23,13 +28,5 @@ namespace MacroSearch
 		{
 
 		}
-
-		//AlphaBetaResult(AlphaBetaScore score, std::vector<BWAPI::UnitType> production)
-		//	:
-		//	Score(score),
-		//	Production(production)
-		//{
-
-		//}
 	};
 }

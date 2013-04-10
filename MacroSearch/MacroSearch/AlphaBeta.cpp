@@ -19,17 +19,23 @@ AlphaBetaResult AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaB
 {
 	if (depth == 0 || node.IsTerminal())
 	{
+		// if we exceeded max depth or the state is terminal, just use an evaluation function
+
 		AlphaBetaResult result;
 		result.Score = node.Eval();
 		result.BestAction = node.GeneratingAction;
+
+		// this is a quick, ugly hack to look at the last optimal game state in the game tree
 		result.FinalGameState = static_cast<Node*>(&node)->_gameState;
 		return result;
 	}
 
 	bool maxPlayer = node.IsMaxPlayerMove();
 
+	// generate the children of the node
 	std::vector<ISearchNode*> children = node.GenerateChildren();
 
+	// search them, depth-first
 	BOOST_FOREACH (ISearchNode *child, children)
 	{
 		AlphaBetaResult childSearchResult = SearchRecursive(*child, depth - 1, alpha, beta);
@@ -46,11 +52,12 @@ AlphaBetaResult AlphaBeta::SearchRecursive(ISearchNode & node, int depth, AlphaB
 
 		if (beta.Score <= alpha.Score)
 		{
-			// alpha or beta cut-off
+			// alpha or beta prune
 			break;
 		}
 	}
 
+	// delete the children (only if this was so easy in real life)
 	for (size_t i = 0; i < children.size(); i++)
 	{
 		delete children[i];

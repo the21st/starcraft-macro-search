@@ -15,26 +15,27 @@ public:
 	PlayerState(void);
 	~PlayerState(void);
 
-	std::vector<BWAPI::UnitType> GetBuildingsOwned() const { return _buildingsOwned; }
-
-	float GetArmyStrength() const { return _armyStrength; }
-	void SetArmyStrength(float val) { _armyStrength = val; }
-
-	float _mineralAmount; 
-	float MineralIncomePerFrame() {return _workerCount * MINERALS_PER_WORKER_PER_FRAME;}
-
-	float _supplyCurrent; 
-	float _supplyMax; 
+	float _supplyCapacity; 
 
 	float _armyStrength;
+
+	float _mineralAmount; 
+
 	int _workerCount;
 
+	float MineralIncomePerFrame() {return _workerCount * MINERALS_PER_WORKER_PER_FRAME;}
+
 	std::vector<BWAPI::UnitType> _buildingsOwned;
+	std::vector<BWAPI::UnitType> & GetBuildingsOwned() { return _buildingsOwned; }
+
 	std::vector<Production> _currentProduction;
 
+	// Returns the number of units of specified type currently in production.
 	int HowManyIsProducing(BWAPI::UnitType unitType) const;
 
+	// Returns the number of buildings of specified type currently owned.
 	int HowManyBuildingsOwned(BWAPI::UnitType unitType) const;
+
 	GameTime GetTimeUntilNextAction();
 };
 

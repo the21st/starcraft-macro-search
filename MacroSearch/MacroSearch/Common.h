@@ -5,7 +5,7 @@
 
 typedef float AlphaBetaScore;
 
-// time = frame count
+// time is frame count
 typedef int GameTime;
 
 namespace MacroSearch

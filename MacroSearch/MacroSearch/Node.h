@@ -13,6 +13,7 @@ extern int totalVisitedNonTerminalNodes;
 namespace MacroSearch
 {
 
+// An implementation of the StarCraft model node for minimax.
 class Node :
 	public ISearchNode
 {

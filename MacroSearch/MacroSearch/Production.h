@@ -6,6 +6,7 @@
 namespace MacroSearch
 {
 
+// Represents a unit or building being produced.
 class Production
 {
 public:

@@ -77,7 +77,5 @@ void Node::AddChildFromAction( Action action, std::vector<ISearchNode*> &childre
 	Node *child = new Node(_simulator.GetNextState(_gameState, action, _gameState._isMaxPlayerMove), _simulator);
 	child->GeneratingAction = action;
 
-	child->WasMaxPlayerAction = _gameState.GetIndexOfPlayerToMove() == 0;
-
 	children.push_back(child);
 }

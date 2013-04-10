@@ -9,7 +9,7 @@ using namespace MacroSearch;
 PlayerState::PlayerState(void)
 	:
 	_armyStrength(0),
-	_supplyMax(10),
+	_supplyCapacity(10),
 	_supplyCurrent(4),
 	_workerCount(4),
 	_mineralAmount(50)

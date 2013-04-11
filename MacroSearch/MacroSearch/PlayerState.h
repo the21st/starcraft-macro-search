@@ -26,7 +26,7 @@ public:
 	float MineralIncomePerFrame() {return _workerCount * MINERALS_PER_WORKER_PER_FRAME;}
 
 	std::vector<BWAPI::UnitType> _buildingsOwned;
-	std::vector<BWAPI::UnitType> & GetBuildingsOwned() { return _buildingsOwned; }
+	const std::vector<BWAPI::UnitType> & GetBuildingsOwned() const { return _buildingsOwned; }
 
 	std::vector<Production> _currentProduction;
 

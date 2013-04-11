@@ -7,10 +7,11 @@
 #include "Timer.h"
 #include "Node.h"
 #include <assert.h>
-
-GameState InitializeGameState();
+#include "GameState.h"
 
 using namespace MacroSearch;
+
+GameState InitializeGameState();
 
 int main(int argc, char* argv[])
 {
